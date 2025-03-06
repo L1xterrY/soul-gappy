@@ -1,3 +1,5 @@
+//код для soul gappy
+
 function setup() {
     createCanvas(600, 400);
     background(200);
