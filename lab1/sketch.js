@@ -1,7 +1,7 @@
 let playerDefense;
 let enemyAttack;
 let score = 0;
-let timeLeft = 3000; // Время на реакцию в миллисекундах
+let timeLeft = 3;
 let gameActive = false;
 let attackTypes = ['sword', 'spear', 'axe'];
 let attackIcons = {
@@ -9,7 +9,6 @@ let attackIcons = {
   spear: '🗡️',
   axe: '🪓'
 };
-let lastAttackTime;
 
 function setup() {
   createCanvas(400, 400);
@@ -27,10 +26,14 @@ function draw() {
     textSize(64);
     text(`Атака: ${attackIcons[enemyAttack]}`, width / 2, height / 2);
     textSize(32);
-    text(`Осталось времени: ${Math.ceil((timeLeft - (millis() - lastAttackTime)) / 1000)}`, width / 2, height * 3 / 4);
+    text(`Осталось времени: ${timeLeft}`, width / 2, height * 3 / 4);
     
-    // Проверка времени
-    if (millis() - lastAttackTime > timeLeft) {
+    // Обновление времени
+    if (frameCount % 60 === 0 && timeLeft > 0) {
+      timeLeft--;
+    }
+    
+    if (timeLeft === 0) {
       endGame();
     }
   } else {
@@ -59,21 +62,19 @@ function keyPressed() {
 
 function startGame() {
   score = 0;
-  timeLeft = 3000; // Сброс времени на реакцию
+  timeLeft = 3;
   gameActive = true;
-  playerDefense = null; // Сброс защиты
   nextAttack();
 }
 
 function nextAttack() {
   enemyAttack = random(attackTypes);
-  lastAttackTime = millis(); // Запоминаем время последней атаки
+  timeLeft = 3; // Сброс времени
 }
 
 function checkDefense() {
   if (playerDefense === enemyAttack) {
     score++;
-    timeLeft = max(1000, timeLeft - 10); // Уменьшаем время на реакцию, но не меньше 1000 мс
     nextAttack();
   } else {
     endGame();
@@ -82,7 +83,6 @@ function checkDefense() {
 
 function endGame() {
   gameActive = false;
-  playerDefense = null; // Сброс защиты
   textSize(32);
   text(`Игра окончена! Счет: ${score}`, width / 2, height / 2);
 }
