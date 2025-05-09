@@ -61,6 +61,7 @@ function startGame() {
   score = 0;
   timeLeft = 3000; // Сброс времени на реакцию
   gameActive = true;
+  playerDefense = null; // Сброс защиты
   nextAttack();
 }
 
@@ -81,6 +82,7 @@ function checkDefense() {
 
 function endGame() {
   gameActive = false;
+  playerDefense = null; // Сброс защиты
   textSize(32);
   text(`Игра окончена! Счет: ${score}`, width / 2, height / 2);
 }
